@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatePicker should render DatePicker 1`] = `
+Object {
+  "attributes": Object {
+    "defaultValue": "2000-01-01",
+    "max": "2001-01-01",
+    "min": "2000-01-01",
+    "type": "date",
+    "value": "2000-01-01",
+  },
+  "eventListeners": Object {
+    "change": [Function],
+  },
+  "tagName": "INPUT",
+}
+`;
