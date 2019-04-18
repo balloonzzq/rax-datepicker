@@ -1,21 +1,42 @@
 import {Component, createElement} from 'rax';
 import {isWeex} from 'universal-env';
-import TouchableHighlight from 'rax-touchable';
 import Text from 'rax-text';
+import View from 'rax-view';
 
-class DatePicker extends Component {
-  constructor(props) {
-    super(props);
+const styles = {
+  initial: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
   }
+};
 
-  handlePress = () => {
+function DatePicker(props) {
+  const {
+    selectedValue,
+    minimumDate,
+    maximumDate,
+    onDateChange,
+    style,
+  } = props;
+
+  let touchableStyle = {
+    ...styles.initial,
+    ...style,
+  };
+  let textStyle = {
+    color: touchableStyle.color,
+    fontSize: touchableStyle.fontSize,
+    fontStyle: touchableStyle.fontStyle,
+    fontWeight: touchableStyle.fontWeight,
+    textAlign: touchableStyle.textAlign,
+    textDecoration: touchableStyle.textDecoration,
+    textOverflow: touchableStyle.textOverflow,
+    lineHeight: touchableStyle.lineHeight
+  };
+
+  function handleClick() {
     if (isWeex) {
-      const {
-        onDateChange,
-        selectedValue,
-        minimumDate,
-        maximumDate,
-      } = this.props;
       const picker = __weex_require__('@weex-module/picker');
 
       picker.pickDate({
@@ -30,61 +51,28 @@ class DatePicker extends Component {
     }
   }
 
-  render() {
-    const {
-      selectedValue,
-      minimumDate,
-      maximumDate,
-      onDateChange,
-      style,
-    } = this.props;
-
-    let touchableStyle = {
-      ...styles.initial,
-      ...style,
-    };
-    let textStyle = {
-      color: touchableStyle.color,
-      fontSize: touchableStyle.fontSize,
-      fontStyle: touchableStyle.fontStyle,
-      fontWeight: touchableStyle.fontWeight,
-      textAlign: touchableStyle.textAlign,
-      textDecoration: touchableStyle.textDecoration,
-      textOverflow: touchableStyle.textOverflow,
-      lineHeight: touchableStyle.lineHeight
-    };
-
-    if (isWeex) {
-      return (
-        <TouchableHighlight {...this.props} onPress={this.handlePress} style={touchableStyle}>
-          <Text style={textStyle}>
-            {selectedValue}
-          </Text>
-        </TouchableHighlight>
-      );
-    } else {
-      return (
-        <input
-          type={'date'}
-          value={selectedValue}
-          defaultValue={selectedValue}
-          min={minimumDate}
-          max={maximumDate}
-          onChange={(e) => {
-            onDateChange && onDateChange(e.target.value);
-          }}
-          style={style} />
-      );
-    }
+  if (isWeex) {
+    return (
+      <View {...this.props} onClick={handleClick} style={touchableStyle}>
+        <Text style={textStyle}>
+          {selectedValue}
+        </Text>
+      </View>
+    );
+  } else {
+    return (
+      <input
+        type={'date'}
+        value={selectedValue}
+        defaultValue={selectedValue}
+        min={minimumDate}
+        max={maximumDate}
+        onChange={(e) => {
+          onDateChange && onDateChange(e.target.value);
+        }}
+        style={style} />
+    );
   }
 }
-
-const styles = {
-  initial: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  }
-};
 
 export default DatePicker;
